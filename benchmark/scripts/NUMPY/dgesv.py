@@ -13,10 +13,10 @@ def run_dgesv(N,l):
 	b = randn(N,N).astype('float64')
 
 	start = time.time();
-	for i in range(0,l):
+	for _ in range(0,l):
 		dgesv(a,b,1,1)
 	end = time.time()
-	
+
 	timediff = (end -start) 
 
 	mflops = ( 2.0/3.0 *N*N*N + 2.0*N*N*N) *l / timediff
@@ -46,8 +46,7 @@ if __name__ == "__main__":
 		z = z + 1
 
 	if 'OPENBLAS_LOOPS' in os.environ:
-		p = os.environ['OPENBLAS_LOOPS']
-		if p:
+		if p := os.environ['OPENBLAS_LOOPS']:
 			LOOPS = int(p);
 
 	print("From: %d To: %d Step=%d Loops=%d" % (N, NMAX, NINC, LOOPS))

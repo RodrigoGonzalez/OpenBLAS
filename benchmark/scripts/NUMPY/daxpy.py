@@ -14,11 +14,11 @@ def run_daxpy(N,l):
 	y = randn(N).astype('float64')
 
 	start = time.time();
-	for i in range(0,l):
+	for _ in range(0,l):
 		y = daxpy(x,y, a=2.0 )
 	end = time.time()
-	
-	timediff = (end -start) 
+
+	timediff = (end -start)
 	mflops = ( 2*N ) *l / timediff
 	mflops *= 1e-6
 
@@ -46,8 +46,7 @@ if __name__ == "__main__":
 		z = z + 1
 
 	if 'OPENBLAS_LOOPS' in os.environ:
-		p = os.environ['OPENBLAS_LOOPS']
-		if p:
+		if p := os.environ['OPENBLAS_LOOPS']:
 			LOOPS = int(p);
 
 	print("From: %d To: %d Step=%d Loops=%d" % (N, NMAX, NINC, LOOPS))

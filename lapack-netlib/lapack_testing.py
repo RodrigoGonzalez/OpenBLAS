@@ -33,7 +33,9 @@ abs_bin_dir=os.path.normpath(os.path.join(os.getcwd(),bin_dir))
 
 for o, a in opts:
     if o in ("-h", "--help"):
-        print(sys.argv[0]+" [-h|--help] [-d dir |--dir dir] [-s |--short] [-r |--run] [-e |--error] [-p p |--prec p] [-t test |--test test] [-n | --number]")
+        print(
+            f"{sys.argv[0]} [-h|--help] [-d dir |--dir dir] [-s |--short] [-r |--run] [-e |--error] [-p p |--prec p] [-t test |--test test] [-n | --number]"
+        )
         print("     - h is to print this message")
         print("     - r is to use to run the LAPACK tests then analyse the output (.out files). By default, the script will not run all the LAPACK tests")
         print("     - d [dir] is to indicate where is the LAPACK testing directory (.out files). By default, the script will use .")
@@ -105,9 +107,9 @@ def run_summary_test( f, cmdline, short_summary):
     nb_test_illegal=0
     nb_test_info=0
 
-    if (with_file):
+    if with_file:
         if not os.path.exists(cmdline):
-            error_message=cmdline+" file not found"
+            error_message = f"{cmdline} file not found"
             r=1
             if short_summary: return [nb_test_run,nb_test_fail,nb_test_illegal,nb_test_info]
         else:
@@ -115,8 +117,8 @@ def run_summary_test( f, cmdline, short_summary):
             r=0
     else:
         if os.name != 'nt':
-            cmdline='./' + cmdline
-        else :
+            cmdline = f'./{cmdline}'
+        else:
             cmdline=abs_bin_dir+os.path.sep+cmdline
 
         outfile=cmdline.split()[4]
@@ -126,16 +128,18 @@ def run_summary_test( f, cmdline, short_summary):
         #pipe.close()
         r=p.returncode
         pipe = open(outfile,'r')
-        error_message=cmdline+" did not work"
+        error_message = f"{cmdline} did not work"
 
     if r != 0 and not with_file:
-        print("---- TESTING " + cmdline.split()[0] + "... FAILED(" + error_message +") !")
+        print(f"---- TESTING {cmdline.split()[0]}... FAILED({error_message}) !")
         for line in pipe.readlines():
             f.write(str(line))
-    elif r != 0 and with_file and not short_summary:
-        print("---- WARNING: please check that you have the LAPACK output : "+cmdline+"!")
+    elif r != 0 and not short_summary:
+        print(
+            f"---- WARNING: please check that you have the LAPACK output : {cmdline}!"
+        )
         print("---- WARNING: with the option -r, we can run the LAPACK testing for you")
-        # print "---- "+error_message
+            # print "---- "+error_message
     else:
         for line in pipe.readlines():
             f.write(str(line))
